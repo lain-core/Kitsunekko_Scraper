@@ -79,7 +79,7 @@ def fetch_subpages(pageList, session):
                 os.makedirs(temp_pages_dir + temp_subpages_dir)
 
             # If the page we're looking to scrape hasn't been written already, or the user hasn't asked to use local files, then go download it.
-            if(not os.path.isfile(subPagePath) or not args.use_local):
+            if(not args.use_local):
                 print("Downloading Page " + name)
                 data = session.get( (BASE_URL + page) )
                 data = data.text
@@ -88,7 +88,11 @@ def fetch_subpages(pageList, session):
                 file.write(data)
                 file.close()
             else:
-                print("Using local versoin of page " + name)
+                print("Using local version of page " + name)
+        else:
+            print("Attempting to download: " + name)
+            singleList = [(page, name)]
+            download_subs(singleList, session)
     return page_list
 
 ## Given a page to eat, scrapes for the first table body found and creates a list of tuples for the href and the value.
